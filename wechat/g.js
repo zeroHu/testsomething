@@ -16,6 +16,7 @@ module.exports = function(opts){
             nonce: '65417124'
         }
          */
+        let that = this;
         let token = opts.token;
         let signature = this.query.signature;
         let nonce = this.query.nonce;
@@ -44,9 +45,26 @@ module.exports = function(opts){
             let content = yield util.parseXMLAsync(data);
 
             console.log('post content is',content.toString());
-            
-            let message = util.formatMessage(context.xml);
+
+            let message = util.formatMessage(content.xml);
             console.log('message content is',message.toString());
+
+            // 推送过来的是事件
+            if(message.MsgType === 'event'){
+                if(message.Event === 'subscribe'){
+                    let now = (new Date().getTime());
+                    that.status = 200;
+                    that.type = 'application/xml';
+                    that.body = `<xml>
+                        <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
+                        <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
+                        <CreateTime>${now}</CreateTime>
+                        <MsgType><![CDATA[text]]></MsgType>
+                        <Content><![CDATA[你好，我是zero]]></Content>
+                        </xml>`;
+                    return;
+                }
+            }
         }
     }
 }
