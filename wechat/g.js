@@ -23,7 +23,7 @@ function Wechat(opts){
                 return that.updateAccessToken(data);
             }
             if(that.isValidAccessToken(data)){
-                Promise.resolve(data)
+                Promise.resolve(data);
             }else{
                 return that.updateAccessToken();
             }
@@ -52,7 +52,7 @@ Wechat.prototype.isValidAccessToken = function(data){
 }
 
 
-Wechat.prototype.updateAccessToken = function(data){
+Wechat.prototype.updateAccessToken = function(){
     let appID = this.appID;
     let AppSecret = this.AppSecret;
     let url = api.accessToken+'&appid='+appID + '&secret=' + AppSecret;
@@ -62,9 +62,10 @@ Wechat.prototype.updateAccessToken = function(data){
             url:url,
             josn:true
         }).then(function(response){
-            var data = response[1];
+            var data = response.body && JSON.parse(response.body);
             var now = (new Date().getTime());
             var expires_in = now + (data.expires_in - 20) * 1000;
+
             data.expires_in = expires_in;
             resolve(data);
         })
