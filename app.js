@@ -4,7 +4,7 @@ const sha1 = require('sha1');
 const wechat = require('./wechat/g');
 const path = require('path');
 const util = require('./libs/util');
-const wechat_file = path.join(__dirname+'./config/wechat.txt');
+const wechat_file = path.join('./config/wechat.txt');
 
 let config = {
     wechat : {
