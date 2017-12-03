@@ -1,6 +1,6 @@
 "use strict"
 
-const replay = function* (next){
+const replay = function *(next){
   let message = this.weixin;
   if(message.MsgType === 'event'){
     // 订阅事件
@@ -45,7 +45,7 @@ const replay = function* (next){
     this.body = reply;
   }
 
-  yield next
+  yield next;
 }
 
 module.exports = {
