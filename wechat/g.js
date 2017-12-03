@@ -47,23 +47,31 @@ module.exports = function(opts,handler){
             console.log('message content is===========>',message);
 
 
-            this.weixin = message;
+            // this.weixin = message;
 
-            yield handler.call(this,next);
+            // yield handler.call(this,next);
 
             console.log('-------wechat reply start -----');
-            wechat.reply.call(this);
+            // wechat.reply.call(this);
 
             // 推送过来的是事件
-            // if(message.MsgType === 'event'){
-            //     if(message.Event === 'subscribe'){
-            //         let now = (new Date().getTime());
-            //         that.status = 200;
-            //         that.type = 'application/xml';
-            //         that.body = xml;
-            //         return;
-            //     }
-            // }
+            if(message.MsgType === 'text'){
+                if(message.Content === 1){
+                    let now = (new Date().getTime());
+                    that.status = 200;
+                    that.type = 'application/xml';
+                    that.body = `
+                        <xml>
+                        <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
+                        <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
+                        <CreateTime>${now}</CreateTime>
+                        <MsgType><![CDATA[text]]></MsgType>
+                        <Content><![CDATA[你回复1 我是不知道你想干啥的]]></Content>
+                        </xml>
+                    `;
+                    return;
+                }
+            }
         }
     }
 }

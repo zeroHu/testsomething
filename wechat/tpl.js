@@ -5,7 +5,7 @@ let tpl = heredoc(function(){/*
   <xml>
       <ToUserName><![CDATA[<%= toUserName %>]]></ToUserName>
       <FromUserName><![CDATA[<%= fromUserName %>]]></FromUserName>
-      <CreateTime><% createTime %></CreateTime>
+      <CreateTime><%= createTime %></CreateTime>
       <MsgType><![CDATA[<%= msgType %>]]></MsgType>
       <% if (msgType === 'text') { %>
         <Content><![CDATA[<%= content %>]]></Content>
