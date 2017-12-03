@@ -51,7 +51,7 @@ module.exports = function(opts,handler){
 
             yield handler.call(this,next);
 
-            wehchat.replay.call(this);
+            wechat.reply.call(this);
 
             // 推送过来的是事件
             // if(message.MsgType === 'event'){

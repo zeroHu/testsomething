@@ -76,7 +76,7 @@ Wechat.prototype.updateAccessToken = function(){
 }
 
 
-Wechat.prototype.replay = function(){
+Wechat.prototype.reply = function(){
     // 拿到回复的内容
     let content = this.body;
     let message = this.weixin;
