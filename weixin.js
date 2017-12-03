@@ -55,14 +55,6 @@ const reply = function *(next){
         url:"http://blog.zeroyh.cn/"
       }]
     }else if(content === '5'){
-      // console.log('xxxxxstart 5');
-      // var data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
-      // console.log('xxxxxend 5',data);
-      // reply = {
-      //     type:'image',
-      //     mediaId:data.media_id
-      // }
-
       /**
        * data json
        * {
