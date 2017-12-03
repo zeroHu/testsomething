@@ -55,6 +55,8 @@ const tplfn = function(content,message){
   info.content = content;
   info.createTime = new Date().getTime();
   info.msgType = type;
+  info.toUserName = toUserName;
+  info.fromUserName = fromUserName;
 
 
   console.log('==========**** go to tpl function',info);
