@@ -92,7 +92,7 @@ Wechat.prototype.fetchAccessToken = function(data){
         })
 }
 
-Wechat.prototype.uploadMaterial = function(type,filepath){
+Wechat.prototype.    = function(type,filepath){
     const that = this;
 
     let form = {
