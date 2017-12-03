@@ -44,8 +44,8 @@ const formatMessage = function(result){
 const tplfn = function(content,message){
   let info = {};
   let type = 'text';
-  let toUserName = message.toUserName;
-  let fromUserName = message.fromUserName;
+  let toUserName = message.ToUserName;
+  let fromUserName = message.FromUserName;
 
   if(Array.isArray(content)){
     type = "news";
