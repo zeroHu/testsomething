@@ -63,7 +63,6 @@ const reply = function *(next){
       //     mediaId:data.media_id
       // }
 
-      console.log('------conetent is 5 start');
       /**
        * data json
        * {
@@ -74,7 +73,6 @@ const reply = function *(next){
        * @type {[type]}
        */
       let data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
-      // let data = ;
       console.log('---------conetent is 5 get data',data);
       reply = {
         type: 'image',
