@@ -4,7 +4,6 @@ const reply = function *(next){
   let message = this.weixin;
 
 
-  console.log('-----reply function message------',message);
   if(message.MsgType === 'event'){
     // 订阅事件
     if(message.Event === 'subscribe'){
@@ -44,7 +43,6 @@ const reply = function *(next){
     if(content === 1){
       reply = '你回复1 我是不知道你想干啥的';
     }
-    console.log('-------reply text return -----',reply);
     this.body = reply;
   }
 

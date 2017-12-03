@@ -44,18 +44,15 @@ module.exports = function(opts,handler){
             let content = yield util.parseXMLAsync(data);
 
             let message = util.formatMessage(content.xml);
-            console.log('message content is===========>',message);
 
 
             this.weixin = message;
 
             yield handler.call(this,next);
 
-            console.log('-------wechat reply start -----');
-
             wechat.reply.call(this);
 
-            // 推送过来的是事件
+            // 测试 推送过来的是事件
             // if(message.MsgType === 'text'){
             //     if(message.Content === 1){
             //         let now = (new Date().getTime());

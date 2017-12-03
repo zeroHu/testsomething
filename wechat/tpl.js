@@ -3,8 +3,8 @@ const heredoc = require('heredoc');
 
 let tpl = heredoc(function(){/*
   <xml>
-      <ToUserName><![CDATA[<%= fromUserName %>]]></ToUserName>
-      <FromUserName><![CDATA[<%= toUserName %>]]></FromUserName>
+      <ToUserName><![CDATA[<%= toUserName %>]]></ToUserName>
+      <FromUserName><![CDATA[<%= fromUserName %>]]></FromUserName>
       <CreateTime><%= createTime %></CreateTime>
       <MsgType><![CDATA[<%= msgType %>]]></MsgType>
       <% if (msgType === 'text') { %>
@@ -47,7 +47,6 @@ let tpl = heredoc(function(){/*
   </xml>
 */});
 
-console.log('-----strat tpl-----');
 let compiled = ejs.compile(tpl);
 
 exports = module.exports = {
