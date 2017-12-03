@@ -114,9 +114,10 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
                         formData:form,
                         josn:true
                     }).then(function(response){
-                        let _data = response.body && JSON.parse(response.body);
+                        // let _data = response.body && JSON.parse(response.body);
+                        let _data = response[1];
                         if(_data) {
-                            console.log('----uploadMaterial request is correct and _data is',_data);
+                            console.log('----uploadMaterial request is correct and _data is',_data,typeof(_data));
                             resolve(_data);
                         }
                         else {
