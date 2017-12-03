@@ -48,4 +48,6 @@ const replay = function* (next){
   yield next
 }
 
-module.exports = replay;
+module.exports = {
+  replay: replay
+};

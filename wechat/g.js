@@ -4,7 +4,7 @@ const getRawBody = require('raw-body');
 const util = require('./util');
 const Wechat = require('./wechat');
 
-module.exports = function(opts){
+module.exports = function(opts,handler){
     return function *(next){
         let wechat = new Wechat(opts);
         /**
@@ -44,7 +44,7 @@ module.exports = function(opts){
             let content = yield util.parseXMLAsync(data);
 
             let message = util.formatMessage(content.xml);
-            console.log('message content is===========>',message.toString());
+            console.log('message content is===========>',message);
 
 
             this.weixin = message;
