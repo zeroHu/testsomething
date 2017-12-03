@@ -85,6 +85,8 @@ Wechat.prototype.reply = function(){
     console.log('=======replay content val',content,'message',message);
     let xml = util.tpl(content,message);
 
+
+    console.log('------reply function last step--------');
     this.status = 200;
     this.type = 'application/xml';
     this.body = xml;

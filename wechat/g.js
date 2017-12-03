@@ -51,6 +51,7 @@ module.exports = function(opts,handler){
 
             yield handler.call(this,next);
 
+            console.log('-------wechat reply start -----');
             wechat.reply.call(this);
 
             // 推送过来的是事件
