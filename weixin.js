@@ -55,8 +55,9 @@ const reply = function *(next){
         url:"http://blog.zeroyh.cn/"
       }]
     }else if(content === '5'){
+      console.log('------conetent is 5 start');
       let data = yield wechatApi.uploadMaterial('image',__dirname+'/wechat-token.jpg');
-      console.log('---------5',data);
+      console.log('---------conetent is 5 get data',data);
       reply = {
         type: 'image',
         mediaId: data.media_id

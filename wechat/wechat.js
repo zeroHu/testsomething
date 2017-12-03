@@ -85,6 +85,7 @@ Wechat.prototype.fetchAccessToken = function(data){
             that.expires_in = data.expires_in;
 
             that.saveAccessToken(data);
+
             return Promise.resolve(data);
         })
 }
@@ -99,8 +100,8 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
     let AppSecret = this.AppSecret;
 
     return new Promise(function(resolve,reject){
-        that.
-            fetchAccessToken()
+        that
+            .fetchAccessToken()
             .then(function(data){
                 console.log('----------uploadMaterial',data);
                 let url = api.upload+'access_token='+data.access_token + '&type=' + type;
@@ -113,7 +114,8 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
                     }).then(function(response){
                         let _data = response.body && JSON.parse(response.body);
                         if(_data) {
-                            resolve(_data)
+                            console.log('----uploadMaterial request is correct and _data is',_data);
+                            resolve(_data);
                         }
                         else {
                             throw new Error('uploadMaterial is wrong ');
@@ -122,7 +124,7 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
                         reject(err);
                     })
                 });
-            })
+            });
     });
 }
 
