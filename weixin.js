@@ -56,6 +56,7 @@ const reply = function *(next){
       }]
     }else if(content === '5'){
       let data = yield wechatApi.uploadMaterial('image',__dirname+'/wechat-token.jpg');
+      console.log('---------5',data);
       reply = {
         type: 'image',
         mediaId: data.media_id

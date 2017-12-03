@@ -59,7 +59,7 @@ Wechat.prototype.updateAccessToken = function(){
 
 
 Wechat.prototype.fetchAccessToken = function(data){
-    let that = this;
+    const that = this;
     if(that.access_token && that.expires_in){
         if(this.isValidAccessToken(this)){
             return Promise.resolve(this);
@@ -102,6 +102,7 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
         that.
             fetchAccessToken()
             .then(function(data){
+                console.log('----------uploadMaterial',data);
                 let url = api.upload+'access_token='+data.access_token + '&type=' + type;
                 return new Promise(function(resolve,reject){
                     request({
@@ -111,8 +112,12 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
                         josn:true
                     }).then(function(response){
                         let _data = response.body && JSON.parse(response.body);
-                        if(_data) resolve(_data)
-                        else throw new Error('uploadMaterial is wrong ')
+                        if(_data) {
+                            resolve(_data)
+                        }
+                        else {
+                            throw new Error('uploadMaterial is wrong ');
+                        }
                     }).catch(function(err){
                         reject(err);
                     })
