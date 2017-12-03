@@ -56,7 +56,7 @@ const reply = function *(next){
       }]
     }else if(content === '5'){
       console.log('xxxxxstart 5');
-      var data = yield wechatApi.uploadTempMaterial('image',__dirname+'/2.jpg');
+      var data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
       console.log('xxxxxend 5',data);
       reply = {
           type:'image',

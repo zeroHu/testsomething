@@ -96,7 +96,7 @@ Wechat.prototype.fetchAccessToken = function(data){
 
 
 
-// Wechat.prototype.uploadTempMaterial = function(type,filepath){
+// Wechat.prototype.uploadMaterial = function(type,filepath){
 //     var that = this;
 //     var form = {  //构造表单
 //         media:fs.createReadStream(filepath)
