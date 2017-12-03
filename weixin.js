@@ -56,7 +56,11 @@ const reply = function *(next){
       }]
     }else if(content === '5'){
       console.log('------conetent is 5 start');
-      let data = yield wechatApi.uploadMaterial('image',__dirname+'/wechat-token.jpg');
+      // let data = yield wechatApi.uploadMaterial('image',__dirname+'/wechat-token.jpg');
+      let data = { type: 'image',
+          media_id: 'NyNbgp3NTNx8ENnpzmYeuwi_bskhlQrGK_AfMKxcm_vHR-ffhcBNxvgsQv_Dq_Kc',
+          created_at: 1512307028
+      };
       console.log('---------conetent is 5 get data',data);
       reply = {
         type: 'image',
