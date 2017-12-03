@@ -103,7 +103,6 @@ Wechat.prototype.fetchAccessToken = function(data){
 //     }
 //     return new Promise(function(resolve,reject){
 //         that.fetchAccessToken().then(function(data){
-
 //             var url = api.uploadUrl + 'access_token=' + data.access_token + '&type=' + type;
 //             request({url:url,method:'POST',formData:form,json:true}).then(function(response){
 //                 var _data = response.body;
@@ -120,41 +119,25 @@ Wechat.prototype.fetchAccessToken = function(data){
 // }
 
 
-
-
 Wechat.prototype.uploadMaterial = function(type,filepath){
     const that = this;
-
     let form = {
         media:fs.createReadStream(filepath)
     }
-    let appID = this.appID;
-    let AppSecret = this.AppSecret;
 
     return new Promise(function(resolve,reject){
-        that
-            .fetchAccessToken()
-            .then(function(data){
-                console.log('----------uploadMaterial',data);
+        that.fetchAccessToken().then(function(data){
                 let url = api.uploadUrl + 'access_token=' + data.access_token + '&type=' + type;
-                return new Promise(function(resolve,reject){
-                    request({
-                        method:'POST',
-                        url:url,
-                        formData:form,
-                        josn:true
-                    }).then(function(response){
-                        let _data = response.body;
-                        if(_data) {
-                            console.log('----uploadMaterial request is correct and _data is',_data,typeof(_data));
-                            resolve(_data);
-                        }
-                        else {
-                            throw new Error('uploadMaterial is wrong ');
-                        }
-                    }).catch(function(err){
-                        reject(err);
-                    })
+                request({url:url,method:'POST',formData:form,josn:true}).then(function(response){
+                    let _data = response.body;
+                    if(_data) {
+                        resolve(_data);
+                    }
+                    else {
+                        throw new Error('uploadMaterial is wrong ');
+                    }
+                }).catch(function(err){
+                    reject(err);
                 });
             });
     });
