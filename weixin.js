@@ -55,26 +55,31 @@ const reply = function *(next){
         url:"http://blog.zeroyh.cn/"
       }]
     }else if(content === '5'){
-      console.log('xxxxxstart 5');
-      var data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
-      console.log('xxxxxend 5',data);
-      reply = {
-          type:'image',
-          mediaId:data.media_id
-      }
-
-
-      // console.log('------conetent is 5 start');
-      // let data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
-      // // let data = { type: 'image',
-      // //     media_id: 'NyNbgp3NTNx8ENnpzmYeuwi_bskhlQrGK_AfMKxcm_vHR-ffhcBNxvgsQv_Dq_Kc',
-      // //     created_at: 1512307028
-      // // };
-      // console.log('---------conetent is 5 get data',data);
+      // console.log('xxxxxstart 5');
+      // var data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
+      // console.log('xxxxxend 5',data);
       // reply = {
-      //   type: 'image',
-      //   mediaId: data.media_id
+      //     type:'image',
+      //     mediaId:data.media_id
       // }
+
+      console.log('------conetent is 5 start');
+      /**
+       * data json
+       * {
+       *     type: 'image',
+       *     media_id: 'NyNbgp3NTNx8ENnpzmYeuwi_bskhlQrGK_AfMKxcm_vHR-ffhcBNxvgsQv_Dq_Kc',
+       *     created_at: 1512307028
+       * }
+       * @type {[type]}
+       */
+      let data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
+      // let data = ;
+      console.log('---------conetent is 5 get data',data);
+      reply = {
+        type: 'image',
+        mediaId: data.media_id
+      }
     }
     this.body = reply;
   }
