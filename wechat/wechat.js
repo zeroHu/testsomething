@@ -86,7 +86,7 @@ Wechat.prototype.reply = function(){
     let xml = util.tpl(content,message);
 
 
-    console.log('------reply function last step--------');
+    console.log('------reply function last step--------',xml);
     this.status = 200;
     this.type = 'application/xml';
     this.body = xml;
