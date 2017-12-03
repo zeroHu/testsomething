@@ -55,13 +55,13 @@ const reply = function *(next){
         url:"http://blog.zeroyh.cn/"
       }]
     }else if(content === '5'){
-      console.log('xxxxxstart 5');
-      var data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
-      console.log('xxxxxend 5',data);
-      reply = {
-          type:'image',
-          mediaId:data.media_id
-      }
+      // console.log('xxxxxstart 5');
+      // var data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
+      // console.log('xxxxxend 5',data);
+      // reply = {
+      //     type:'image',
+      //     mediaId:data.media_id
+      // }
 
       /**
        * data json
@@ -72,12 +72,12 @@ const reply = function *(next){
        * }
        * @type {[type]}
        */
-      // let data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
-      // console.log('---------conetent is 5 get data',data);
-      // reply = {
-      //   type: 'image',
-      //   mediaId: data.media_id
-      // }
+      let data = yield wechatApi.uploadMaterial('image',__dirname+'/2.jpg');
+      console.log('---------conetent is 5 get data',data);
+      reply = {
+        type: 'image',
+        mediaId: data.media_id
+      }
     }
     this.body = reply;
   }
