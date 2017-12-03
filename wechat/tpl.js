@@ -3,8 +3,8 @@ const heredoc = require('heredoc');
 
 let tpl = heredoc(function(){/*
   <xml>
-      <ToUserName><![CDATA[<%= message.toUserName %>]]></ToUserName>
-      <FromUserName><![CDATA[<%= message.fromUserName %>]]></FromUserName>
+      <ToUserName><![CDATA[<%= toUserName %>]]></ToUserName>
+      <FromUserName><![CDATA[<%= fromUserName %>]]></FromUserName>
       <CreateTime><% createTime %></CreateTime>
       <MsgType><![CDATA[<%= msgType %>]]></MsgType>
       <% if (msgType === 'text') { %>
