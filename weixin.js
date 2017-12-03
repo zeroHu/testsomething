@@ -1,9 +1,14 @@
 "use strict"
 
+const config = require('./config');
+const Wechat = require('./wechat/wechat');
+
+const wechatApi = new Wechat(config.wechat);
+
 const reply = function *(next){
   let message = this.weixin;
 
-
+  // 事件
   if(message.MsgType === 'event'){
     // 订阅事件
     if(message.Event === 'subscribe'){
@@ -40,12 +45,24 @@ const reply = function *(next){
     let reply = '您说的'+ message.Content + '太浮夸了';
 
     // 根据用户输入的内容来回复
-    if(content === 1){
+    if(content === '1'){
       reply = '你回复1 我是不知道你想干啥的';
+    }else if(content === '2'){
+      reply = [{
+        title:"技术改变",
+        descripttion:"just descripttion",
+        picUrl:"http://blog.zeroyh.cn/images/avatar.jpeg",
+        url:"http://blog.zeroyh.cn/"
+      }]
+    }else if(content === '5'){
+      let data = yield wechatApi.uploadMaterial('image',__dirname+'/wechat-token.jpg');
+      reply = {
+        type: 'image',
+        mediaId: data.media_id
+      }
     }
     this.body = reply;
   }
-
   yield next;
 }
 
