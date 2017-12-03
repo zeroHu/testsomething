@@ -60,7 +60,7 @@ const tplfn = function(content,message){
 
 
   console.log('==========**** go to tpl function',info);
-  return tpl.compile(info);
+  return tpl.compiled(info);
 }
 
 

@@ -47,8 +47,9 @@ let tpl = heredoc(function(){/*
   </xml>
 */});
 
-let compile = ejs.compile(tpl);
+console.log('-----strat tpl-----');
+let compiled = ejs.compile(tpl);
 
-module.exports = {
-  compile: compile
+exports = module.exports = {
+  compiled: compiled
 };
