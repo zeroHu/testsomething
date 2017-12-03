@@ -92,45 +92,75 @@ Wechat.prototype.fetchAccessToken = function(data){
         })
 }
 
-Wechat.prototype.uploadMaterial = function(type,filepath){
-    const that = this;
 
-    let form = {
+
+
+
+Wechat.prototype.uploadTempMaterial = function(type,filepath){
+    var that = this;
+    var form = {  //构造表单
         media:fs.createReadStream(filepath)
     }
-    let appID = this.appID;
-    let AppSecret = this.AppSecret;
-
     return new Promise(function(resolve,reject){
-        that
-            .fetchAccessToken()
-            .then(function(data){
-                console.log('----------uploadMaterial',data);
-                let url = api.upload+'access_token='+data.access_token + '&type=' + type;
-                return new Promise(function(resolve,reject){
-                    request({
-                        method:'POST',
-                        url:url,
-                        formData:form,
-                        josn:true
-                    }).then(function(response){
-                        // let _data = response.body && JSON.parse(response.body);
-                        let _data = response[1];
-                        if(_data) {
-                            console.log('----uploadMaterial request is correct and _data is',_data,typeof(_data));
-                            resolve(_data);
-                        }
-                        else {
-                            throw new Error('uploadMaterial is wrong ');
-                        }
-                    }).catch(function(err){
-                        reject(err);
-                    })
-                });
+        that.fetchAccessToken().then(function(data){
+
+            var url = api.uploadMaterial + 'access_token=' + data.access_token + '&type=' + type;
+            request({url:url,method:'POST',formData:form,json:true}).then(function(response){
+                var _data = response.body;
+                if(_data){
+                    resolve(_data)
+                }else{
+                    throw new Error('upload material failed!');
+                }
+            }).catch(function(err){
+                reject(err);
             });
+        });
     });
-    console.lot('11111111111111');
 }
+
+
+
+
+// Wechat.prototype.uploadMaterial = function(type,filepath){
+//     const that = this;
+
+//     let form = {
+//         media:fs.createReadStream(filepath)
+//     }
+//     let appID = this.appID;
+//     let AppSecret = this.AppSecret;
+
+//     return new Promise(function(resolve,reject){
+//         that
+//             .fetchAccessToken()
+//             .then(function(data){
+//                 console.log('----------uploadMaterial',data);
+//                 let url = api.upload+'access_token='+data.access_token + '&type=' + type;
+//                 return new Promise(function(resolve,reject){
+//                     request({
+//                         method:'POST',
+//                         url:url,
+//                         formData:form,
+//                         josn:true
+//                     }).then(function(response){
+//                         let _data = response.body && JSON.parse(response.body);
+//                         // let _data = response[1];
+//                         if(_data) {
+//                             console.log('----uploadMaterial request is correct and _data is',_data,typeof(_data));
+//                             resolve(_data);
+//                         }
+//                         else {
+//                             throw new Error('uploadMaterial is wrong ');
+//                         }
+//                     }).catch(function(err){
+//                         reject(err);
+//                     })
+//                 });
+//             });
+//     });
+//     console.lot('11111111111111');
+// }
 
 
 Wechat.prototype.reply = function(){
