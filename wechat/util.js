@@ -1,5 +1,6 @@
 "use strict"
 const xml2js = require('xml2js');
+const tpl = require('./tpl');
 const Promise = require('bluebird');
 
 const parseXMLAsync = function(xml){
@@ -40,8 +41,27 @@ const formatMessage = function(result){
   return message;
 }
 
+const tplfn = function(content,message){
+  let info = {};
+  let type = 'text';
+  let toUserName = message.toUserName;
+  let fromUserName = message.fromUserName;
+
+  if(Array.isArray(content)){
+    type = "news";
+  }
+  type = content.type || type;
+
+  info.content = content;
+  info.createTime = new Date().getTime();
+  info.msgType = type;
+
+  return tpl.compile(info);
+}
+
 
 module.exports = {
   parseXMLAsync:parseXMLAsync,
-  formatMessage:formatMessage
+  formatMessage:formatMessage,
+  tpl:tplfn
 }

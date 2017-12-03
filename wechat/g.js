@@ -41,30 +41,28 @@ module.exports = function(opts){
                 limit:'1mb',
                 encoding:this.charset
             });
-            console.log('post xml is --->',data.toString());
             let content = yield util.parseXMLAsync(data);
 
-            console.log('post content is',content.toString());
-
             let message = util.formatMessage(content.xml);
-            console.log('message content is',message.toString());
+            console.log('message content is===========>',message.toString());
+
+
+            this.weixin = message;
+
+            yield handler.call(this,next);
+
+            wehchat.replay.call(this);
 
             // 推送过来的是事件
-            if(message.MsgType === 'event'){
-                if(message.Event === 'subscribe'){
-                    let now = (new Date().getTime());
-                    that.status = 200;
-                    that.type = 'application/xml';
-                    that.body = `<xml>
-                        <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
-                        <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
-                        <CreateTime>${now}</CreateTime>
-                        <MsgType><![CDATA[text]]></MsgType>
-                        <Content><![CDATA[你好，我是zero]]></Content>
-                        </xml>`;
-                    return;
-                }
-            }
+            // if(message.MsgType === 'event'){
+            //     if(message.Event === 'subscribe'){
+            //         let now = (new Date().getTime());
+            //         that.status = 200;
+            //         that.type = 'application/xml';
+            //         that.body = xml;
+            //         return;
+            //     }
+            // }
         }
     }
 }
