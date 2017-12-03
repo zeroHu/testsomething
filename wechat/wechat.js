@@ -60,11 +60,13 @@ Wechat.prototype.updateAccessToken = function(){
 
 Wechat.prototype.fetchAccessToken = function(data){
     const that = this;
+    // 有效的token
     if(that.access_token && that.expires_in){
         if(this.isValidAccessToken(this)){
             return Promise.resolve(this);
         }
     }
+    // 无效的token 获取
     this.getAccessToken()
         .then(function(data){
             // 是否有access_token
@@ -85,17 +87,17 @@ Wechat.prototype.fetchAccessToken = function(data){
             that.expires_in = data.expires_in;
 
             that.saveAccessToken(data);
-
+            console.log('--------fetchAccessToken',data);
             return Promise.resolve(data);
         })
 }
 
 Wechat.prototype.uploadMaterial = function(type,filepath){
+    const that = this;
+
     let form = {
         media:fs.createReadStream(filepath)
     }
-
-    let that = this;
     let appID = this.appID;
     let AppSecret = this.AppSecret;
 
@@ -126,6 +128,7 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
                 });
             });
     });
+    console.lot('11111111111111');
 }
 
 
