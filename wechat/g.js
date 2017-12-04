@@ -46,37 +46,38 @@ module.exports = function(opts,handler){
                 encoding: this.charset
             });
 
-            // content 是指请求的data
+            // content 是指发送过来的data 下面是content 格式
+            /*{
+                xml:{
+                    ToUserName: [ 'gh_4bbce1727be7' ],
+                    FromUserName: [ 'oiLtb1hEhRLc3fPCAoMLobL016Tw' ],
+                    CreateTime: [ '1512379368' ],
+                    MsgType: [ 'text' ],
+                    Content: [ '1' ],
+                    MsgId: [ '6495619925126148093' ]
+                }
+            }*/
             let content = yield util.parseXMLAsync(data);
-            // message
+
+            // 发送过来的 data 下面是 message 也就是content转换后的格式
+            /*{
+                ToUserName: 'gh_4bbce1727be7',
+                FromUserName: 'oiLtb1hEhRLc3fPCAoMLobL016Tw',
+                CreateTime: '1512379368',
+                MsgType: 'text',
+                Content: '1',
+                MsgId: '6495619925126148093'
+            }*/
             let message = util.formatMessage(content.xml);
 
             // 赋值 weixin 的值为 message
             this.weixin = message;
 
-            // 执行模板消息
+            // 执行回复模板消息拼接
             yield handler.call(this,next);
+
             // 执行回复
             wechat.reply.call(this);
-
-            // 测试 推送过来的是事件
-            // if(message.MsgType === 'text'){
-            //     if(message.Content === 1){
-            //         let now = (new Date().getTime());
-            //         that.status = 200;
-            //         that.type = 'application/xml';
-            //         that.body = `
-            //             <xml>
-            //             <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
-            //             <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
-            //             <CreateTime>${now}</CreateTime>
-            //             <MsgType><![CDATA[text]]></MsgType>
-            //             <Content><![CDATA[你回复1 我是不知道你想干啥的]]></Content>
-            //             </xml>
-            //         `;
-            //         return;
-            //     }
-            // }
         }
     }
 }

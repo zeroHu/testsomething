@@ -1,6 +1,6 @@
 "use strict";
 const Koa = require('koa');
-const router = require('koa-router')();//router
+// const router = require('koa-router')();//router
 const sha1 = require('sha1');
 const wechat = require('./wechat/g');
 const config = require('./config');

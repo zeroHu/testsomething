@@ -103,6 +103,22 @@ Wechat.prototype.fetchAccessToken = function(data){
         })
 }
 
+// 回复模板
+Wechat.prototype.reply = function(){
+    let content = this.body;//想回复的内容
+    let message = this.weixin;//收到的内容
+
+    console.log('=======replay content val======',content,'message',message);
+    // 编译返回的xml
+    let xml = util.tpl(content,message);
+
+    console.log('----the replay send xml is----',xml);
+    this.status = 200;
+    this.type = 'application/xml';
+    this.body = xml;
+}
+
+
 // 创建菜单
 Wechat.prototype.createMenu = function(menu){
     const that = this;
@@ -156,7 +172,7 @@ Wechat.prototype.deleteMenu = function(){
 Wechat.prototype.uploadMaterial = function(type,filepath){
     const that = this;
     let form = { //构造表单
-        media:fs.createReadStream(filepath)
+        media: fs.createReadStream(filepath)
     }
     // 上传素材
     return new Promise(function(resolve,reject){
@@ -176,85 +192,6 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
         });
     });
 }
-
-// 回复
-Wechat.prototype.reply = function(){
-    // 拿到回复的内容
-    let content = this.body;
-    let message = this.weixin;
-
-
-    console.log('=======replay content val======',content,'message',message);
-    let xml = util.tpl(content,message);
-
-    console.log('----the replay send xml is----',xml);
-    this.status = 200;
-    this.type = 'application/xml';
-    this.body = xml;
-    return;
-}
-
-// 获取 js api ticket function
-Wechat.prototype.getJsApiTicket = function(){
-    // 上传素材
-    return new Promise(function(resolve,reject){
-        that.fetchAccessToken().then(function(data){
-            let options = {
-                method: 'GET',
-                url: api.jsTicktUrl + 'access_token=' + data.access_token + '&type=' + type,
-                json: true
-            };
-            // 获取信息
-            request(options, function(err, res, body) {
-                if (res) {
-                    resolve(body);
-                } else {
-                    reject(err);
-                }
-            });
-        });
-    });
-}
-
-// 获取签名
-Wechat.prototype.getSign = function(jsApiTicket, noncestr, timestamp, url){
-    let data = {
-        'jsapi_ticket': jsApiTicket,
-        'noncestr': noncestr,
-        'timestamp': timestamp,
-        'url': url
-    };
-    var sortData = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + noncestr + "×tamp=" + timestamp + "&url=" + url;
-    return sha1(sortData);
-}
-
-
-// 获取jsapidata
-Wechat.prototype.getJsApiData = function(clientUrl){
-    //noncestr
-    function getNonceStr() {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for (var i = 0; i < 16; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-        return text;
-    }
-
-    //timestamp
-    function getTimestamp() {
-        return new Date().valueOf();
-    }
-
-
-    let noncestr = getNonceStr();
-    let timestamp = getTimestamp();
-    // 返回结果
-    return this.getJsApiTicket().then(data => {
-        return [getSign(JSON.parse(data).ticket, noncestr, timestamp, clientUrl), timestamp, noncestr];
-    });
-}
-
 
 module.exports = Wechat;
 

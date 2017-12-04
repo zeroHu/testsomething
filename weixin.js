@@ -52,6 +52,7 @@ const reply = function*(next) {
         if (content === '1') {
             reply = '你回复1 我是不知道你想干啥的';
         } else if (content === '2') {
+            // 图文消息固定格式是这样 可查阅文档 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140543
             reply = [{
                 title: "技术改变",
                 descripttion: "just descripttion",
@@ -59,6 +60,7 @@ const reply = function*(next) {
                 url: "http://blog.zeroyh.cn/"
             }]
         } else if (content === '5') {
+            // 自动回复图片消息
             /**
              * data json
              * {
@@ -75,6 +77,14 @@ const reply = function*(next) {
             }
         }
         this.body = reply;
+    }
+    // 语音回复
+    else if (message.MsgType === 'voice'){
+
+    }
+    // 图片回复
+    else if(message.MsgType === 'image'){
+
     }
     yield next;
 }
