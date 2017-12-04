@@ -78,6 +78,9 @@ module.exports = function(opts,handler){
 
             // 执行回复
             wechat.reply.call(this);
+
+            // 接着执行下面的app.use
+            yield next;
         }
     }
 }
