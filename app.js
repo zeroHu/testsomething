@@ -1,6 +1,6 @@
 "use strict";
 const Koa = require('koa');
-const router = require('koa-router')();
+const router = require('koa-router')();//router
 const sha1 = require('sha1');
 const wechat = require('./wechat/g');
 const config = require('./config');
@@ -14,9 +14,8 @@ const RouteFn = require('./router');
 // 引用中间件
 app.use(wechat(config.wechat,weixin.reply));
 
-console.log('-----start router ------');
 
-router.post('/auth',RouteFn.auth);
+// router.post('/auth',RouteFn.auth);
 
 app.listen(3006);
 console.log('listening 3006');

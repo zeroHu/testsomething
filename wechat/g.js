@@ -25,31 +25,38 @@ module.exports = function(opts,handler){
         let str = [token,timestamp,nonce].sort().join("");
         let sha = sha1(str);
 
+        // 如果是 GET 请求
         if(this.method === 'GET'){
             if(sha === signature){
                 this.body = echostr+'';
             }else{
                 this.body = 'wrong';
             }
-        }else if(this.method === 'POST'){
+        }
+        // 如果是 POST 请求
+        else if(this.method === 'POST'){
             if(sha !== signature){
                 this.body = 'wrong';
                 return false;
             }
+            // 处理data 格式
             let data = yield getRawBody(this.req,{
-                length:this.length,
-                limit:'1mb',
-                encoding:this.charset
+                length: this.length,
+                limit: '1mb',
+                encoding: this.charset
             });
-            let content = yield util.parseXMLAsync(data);
 
+            // content 是指请求的data
+            let content = yield util.parseXMLAsync(data);
+            // message
             let message = util.formatMessage(content.xml);
 
-
+            // 赋值 weixin 的值为 message
             this.weixin = message;
 
+            // 执行模板消息
             yield handler.call(this,next);
-
+            // 执行回复
             wechat.reply.call(this);
 
             // 测试 推送过来的是事件
