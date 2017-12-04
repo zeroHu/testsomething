@@ -8,18 +8,30 @@ const request = Promise.promisify(require('request'));
 let prefix = 'https://api.weixin.qq.com/cgi-bin/';
 let api = {
     accessToken: prefix + 'token?grant_type=client_credential',
-    uploadUrl: prefix+'media/upload?'//access_token=ACCESS_TOKEN&type=TYPE
+    uploadUrl: prefix+'media/upload?',//access_token=ACCESS_TOKEN&type=TYPE
+    menuUrl: prefix + 'menu/create?'//access_token=ACCESS_TOKEN
 }
 
 function Wechat(opts){
     const that = this;
+    // 获取appid and appsecret
     this.appID = opts.appID;
     this.AppSecret = opts.AppSecret;
+
+    // 读 或者写 accesstoken
     this.getAccessToken = opts.getAccessToken;
     this.saveAccessToken = opts.saveAccessToken;
 
+    // 获取菜单
+    this.getMenus = opts.getMenus;
+
+    // 初始执行获取accesstoken
     this.fetchAccessToken();
+
+    // 获取菜单
+    this.getMenus();
 }
+
 Wechat.prototype.isValidAccessToken = function(data){
     if(!data || !data.access_token || !data.expires_in){
         return false
@@ -35,7 +47,6 @@ Wechat.prototype.isValidAccessToken = function(data){
         return false;
     }
 }
-
 
 Wechat.prototype.updateAccessToken = function(){
     let appID = this.appID;
@@ -87,23 +98,20 @@ Wechat.prototype.fetchAccessToken = function(data){
             that.expires_in = data.expires_in;
 
             that.saveAccessToken(data);
-            console.log('--------fetchAccessToken',data);
             return Promise.resolve(data);
         })
 }
 
-
-Wechat.prototype.uploadMaterial = function(type,filepath){
+Wechat.prototype.getMenus = function(){
     const that = this;
-    let form = { //构造表单
-        media:fs.createReadStream(filepath)
-    }
-
     return new Promise(function(resolve,reject){
+        // 返回access_token
         that.fetchAccessToken().then(function(data){
-
-                let url = api.uploadUrl + 'access_token=' + data.access_token + '&type=' + type;
-                request({url:url,method:'POST',formData:form,json:true}).then(function(response){
+            let url = api.menuUrl + 'access_token=' + data.access_token;
+            // 获取menus json 格式
+            that.getMenus().then(function(mdata){
+                // 发送请求
+                request({url:url,method:'POST',formData:mdata,json:true}).then(function(response){
                     let _data = response.body;
                     if(_data) {
                         resolve(_data)
@@ -115,6 +123,31 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
                     reject(err);
                 });
             });
+        });
+    });
+}
+
+Wechat.prototype.uploadMaterial = function(type,filepath){
+    const that = this;
+    let form = { //构造表单
+        media:fs.createReadStream(filepath)
+    }
+    // 上传素材
+    return new Promise(function(resolve,reject){
+        that.fetchAccessToken().then(function(data){
+            let url = api.uploadUrl + 'access_token=' + data.access_token + '&type=' + type;
+            request({url:url,method:'POST',formData:form,json:true}).then(function(response){
+                let _data = response.body;
+                if(_data) {
+                    resolve(_data)
+                }
+                else {
+                    throw new Error('uploadMaterial is wrong ');
+                }
+            }).catch(function(err){
+                reject(err);
+            });
+        });
     });
 }
 
