@@ -2,7 +2,6 @@
 
 const path = require('path');
 const wechat_file = path.join('./config/wechat.txt');
-const menus_file = path.join('./config/menus.txt');
 const util = require('./libs/util');
 
 let config = {
@@ -18,9 +17,6 @@ let config = {
         saveAccessToken: function(data){
             data = JSON.stringify(data);
             return util.writeFileAsync(wechat_file,data)
-        },
-        getMenus:function(){
-            return util.readFileAsync(menus_file);
         }
     }
 }

@@ -1,4 +1,6 @@
-{
+"use strict";
+
+exports = module.exports = {
     "button":[{
       "type":"click",
       "name":"今日歌曲",
