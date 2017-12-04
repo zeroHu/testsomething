@@ -9,13 +9,8 @@ const wechatApi = new Wechat(config.wechat);
 
 const reply = function *(next){
   // 初始化菜单
-  wechatApi.deleteMenu().then(function(){
-      return wechatApi.createMenu(menus_file);
-  }).then(function(msg){
-      console.log(msg);
-  });
+  wechatApi.createMenu(menus_file);
   let message = this.weixin;
-
   // 事件
   if(message.MsgType === 'event'){
     // 订阅事件
@@ -81,6 +76,7 @@ const reply = function *(next){
     }
     this.body = reply;
   }
+
   yield next;
 }
 

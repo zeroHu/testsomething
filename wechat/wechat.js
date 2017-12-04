@@ -28,6 +28,8 @@ function Wechat(opts){
     this.fetchAccessToken();
 }
 
+
+// 检测accesstoken 是否是有效的
 Wechat.prototype.isValidAccessToken = function(data){
     if(!data || !data.access_token || !data.expires_in){
         return false
@@ -44,6 +46,7 @@ Wechat.prototype.isValidAccessToken = function(data){
     }
 }
 
+// 更新accesstoken
 Wechat.prototype.updateAccessToken = function(){
     let appID = this.appID;
     let AppSecret = this.AppSecret;
@@ -64,7 +67,7 @@ Wechat.prototype.updateAccessToken = function(){
     });
 }
 
-
+// 获取accesstoken
 Wechat.prototype.fetchAccessToken = function(data){
     const that = this;
     // 有效的token
@@ -98,12 +101,19 @@ Wechat.prototype.fetchAccessToken = function(data){
         })
 }
 
+// 创建菜单
 Wechat.prototype.createMenu = function(menu){
     const that = this;
     return new Promise(function(resolve,reject){
         that.fetchAccessToken().then(function(data){
             var url = api.menuCreate + 'access_token=' + data.access_token;
             request({url:url,method:'POST',body:menu,json:true}).then(function(response){
+                /**   个人订阅号无此权限的说明
+                *{
+                *   errcode: 48001,
+                *   errmsg: 'api unauthorized hint: [DzGhYa0960vr64!]'
+                * }
+                */
                 var _data = response.body;
                 if(_data.errcode === 0){
                     resolve(_data);
@@ -118,7 +128,7 @@ Wechat.prototype.createMenu = function(menu){
 }
 
 
-
+// 删除菜单
 Wechat.prototype.deleteMenu = function(){
     const that = this;
     return new Promise(function(resolve,reject){
@@ -139,7 +149,7 @@ Wechat.prototype.deleteMenu = function(){
 }
 
 
-
+// 上传素材
 Wechat.prototype.uploadMaterial = function(type,filepath){
     const that = this;
     let form = { //构造表单
@@ -164,19 +174,17 @@ Wechat.prototype.uploadMaterial = function(type,filepath){
     });
 }
 
-
+// 回复
 Wechat.prototype.reply = function(){
     // 拿到回复的内容
     let content = this.body;
     let message = this.weixin;
 
 
-    console.log('=======replay content val',content,'message',message);
-
+    console.log('=======replay content val======',content,'message',message);
     let xml = util.tpl(content,message);
 
-    console.log('----the send end xml is',xml);
-
+    console.log('----the replay send xml is----',xml);
     this.status = 200;
     this.type = 'application/xml';
     this.body = xml;
