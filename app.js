@@ -1,16 +1,14 @@
 "use strict";
 const Koa = require('koa');
-const router = require('koa-route');
+const Krouter = require('koa-route');
 const sha1 = require('sha1');
 const wechat = require('./wechat/g');
 const config = require('./config');
 const weixin = require('./weixin');
-const Krouter = require('./router');
 
 let app = new Koa();
 
-
-// router
+// 定义路由
 const auth = require('./router').auth;
 
 // 引用中间件

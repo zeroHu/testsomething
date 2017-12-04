@@ -1,10 +1,13 @@
 "use strict"
 
-const getJsApiData = require('./wechat/jssdk').getJsApiData;
+const Wechat = require('./wechat/wechat');
+const config = require('./config');
 
-const auth = function() {
+const wechatApi = new Wechat(config.wechat);
+
+const auth = function(req, res) {
     var clientUrl = 'http://' + req.hostname + req.url;
-    getJsApiData(clientUrl).then(data => {
+    wechatApi.getJsApiData(clientUrl).then(data => {
         res.json({
             signature: data[0],
             timestamp: data[1],

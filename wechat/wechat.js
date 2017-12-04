@@ -4,14 +4,16 @@ const Promise = require('bluebird');
 const util = require('./util');
 const fs = require('fs');
 const path = require('path');
+const sha1 = require('sha1');
 const request = Promise.promisify(require('request'));
 
 let prefix = 'https://api.weixin.qq.com/cgi-bin/';
 let api = {
     accessToken: prefix + 'token?grant_type=client_credential',
-    uploadUrl: prefix+'media/upload?',//access_token=ACCESS_TOKEN&type=TYPE
+    uploadUrl: prefix + 'media/upload?',//access_token=ACCESS_TOKEN&type=TYPE
     menuCreate: prefix + 'menu/create?',//access_token=ACCESS_TOKEN
-    menuDelete:prefix+'/menu/delete?'
+    menuDelete: prefix + '/menu/delete?',
+    jsTicktUrl: prefix + 'ticket/getticket?'//access_token=' + token + '&type=jsapi';
 }
 
 function Wechat(opts){
@@ -190,6 +192,68 @@ Wechat.prototype.reply = function(){
     this.body = xml;
     return;
 }
+
+// 获取 js api ticket function
+Wechat.prototype.getJsApiTicket = function(){
+    // 上传素材
+    return new Promise(function(resolve,reject){
+        that.fetchAccessToken().then(function(data){
+            let options = {
+                method: 'GET',
+                url: api.jsTicktUrl + 'access_token=' + data.access_token + '&type=' + type,
+                json: true
+            };
+            // 获取信息
+            request(options, function(err, res, body) {
+                if (res) {
+                    resolve(body);
+                } else {
+                    reject(err);
+                }
+            });
+        });
+    });
+}
+
+// 获取签名
+Wechat.prototype.getSign = function(jsApiTicket, noncestr, timestamp, url){
+    let data = {
+        'jsapi_ticket': jsApiTicket,
+        'noncestr': noncestr,
+        'timestamp': timestamp,
+        'url': url
+    };
+    var sortData = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + noncestr + "×tamp=" + timestamp + "&url=" + url;
+    return sha1(sortData);
+}
+
+
+// 获取jsapidata
+Wechat.prototype.getJsApiData = function(clientUrl){
+    //noncestr
+    function getNonceStr() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i = 0; i < 16; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
+
+    //timestamp
+    function getTimestamp() {
+        return new Date().valueOf();
+    }
+
+
+    let noncestr = getNonceStr();
+    let timestamp = getTimestamp();
+    // 返回结果
+    return this.getJsApiTicket().then(data => {
+        return [getSign(JSON.parse(data).ticket, noncestr, timestamp, clientUrl), timestamp, noncestr];
+    });
+}
+
 
 module.exports = Wechat;
 
