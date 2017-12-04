@@ -12,6 +12,7 @@ const parseXMLAsync = function(xml){
   });
 }
 
+// 格式化message
 const formatMessage = function(result){
   let message = {};
   if(typeof result === 'object'){
