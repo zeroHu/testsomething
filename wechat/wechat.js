@@ -120,7 +120,8 @@ Wechat.prototype.createMenu = function(menu){
                 if(_data.errcode === 0){
                     resolve(_data);
                 }else{
-                    throw new Error('create menu failed!');
+                    console.log('createMenu 失败了 失败code' + _data.errcode + '如果是 48001 就是没有权限');
+                    // throw new Error('create menu failed!');
                 }
             }).catch(function(err){
                 reject(err);

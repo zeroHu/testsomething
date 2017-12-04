@@ -14,6 +14,7 @@ const auth = require('./router').auth;
 // 引用中间件
 app.use(wechat(config.wechat,weixin.reply));
 
+console.log('-----start router ------');
 // 路由
 app.use(Krouter.get('/auth', auth));
 
