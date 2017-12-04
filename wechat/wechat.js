@@ -4,14 +4,14 @@ const Promise = require('bluebird');
 const util = require('./util');
 const fs = require('fs');
 const path = require('path');
-const menus_file = path.join('../config/menus.js');
 const request = Promise.promisify(require('request'));
 
 let prefix = 'https://api.weixin.qq.com/cgi-bin/';
 let api = {
     accessToken: prefix + 'token?grant_type=client_credential',
     uploadUrl: prefix+'media/upload?',//access_token=ACCESS_TOKEN&type=TYPE
-    menuCreate: prefix + 'menu/create?'//access_token=ACCESS_TOKEN
+    menuCreate: prefix + 'menu/create?',//access_token=ACCESS_TOKEN
+    menuDelete:prefix+'/menu/delete?'
 }
 
 function Wechat(opts){
@@ -26,10 +26,6 @@ function Wechat(opts){
 
     // 初始执行获取accesstoken
     this.fetchAccessToken();
-
-    console.log('========== start createMenu ===========');
-    // 获取菜单
-    this.createMenu(menus_file);
 }
 
 Wechat.prototype.isValidAccessToken = function(data){
@@ -103,14 +99,14 @@ Wechat.prototype.fetchAccessToken = function(data){
 }
 
 Wechat.prototype.createMenu = function(menu){
-    var that = this;
+    const that = this;
     return new Promise(function(resolve,reject){
         that.fetchAccessToken().then(function(data){
             var url = api.menuCreate + 'access_token=' + data.access_token;
             request({url:url,method:'POST',body:menu,json:true}).then(function(response){
                 var _data = response.body;
                 if(_data.errcode === 0){
-                    resolve();
+                    resolve(_data);
                 }else{
                     throw new Error('create menu failed!');
                 }
@@ -120,6 +116,28 @@ Wechat.prototype.createMenu = function(menu){
         });
     });
 }
+
+
+
+Wechat.prototype.deleteMenu = function(){
+    const that = this;
+    return new Promise(function(resolve,reject){
+        that.fetchAccessToken().then(function(data){
+            let url = api.menuDelete + 'access_token=' + data.access_token;
+            request({url:url,json:true}).then(function(response){
+                var _data = response.body;
+                if(_data.errcode === 0){
+                    resolve();
+                }else{
+                    throw new Error('delete menu failed!');
+                }
+            }).catch(function(err){
+                reject(err);
+            });
+        });
+    });
+}
+
 
 
 Wechat.prototype.uploadMaterial = function(type,filepath){

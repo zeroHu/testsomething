@@ -2,10 +2,18 @@
 
 const config = require('./config');
 const Wechat = require('./wechat/wechat');
+const path = require('path');
+const menus_file = path.join('./config/menus.js');
 
 const wechatApi = new Wechat(config.wechat);
 
 const reply = function *(next){
+  // 初始化菜单
+  wechatApi.deleteMenu().then(function(){
+      return wechatApi.createMenu(menus_file);
+  }).then(function(msg){
+      console.log(msg);
+  });
   let message = this.weixin;
 
   // 事件
